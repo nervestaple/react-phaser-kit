@@ -1,0 +1,94 @@
+{
+  "name": "react-phaser-kit",
+  "version": "0.0.1",
+  "description": "React component kit for Phaser game engine",
+  "main": "src/index.js",
+  "author": "Jim <nervestaple@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "fbjs": "^0.8.16",
+    "lodash": "^4.17.4",
+    "phaser": "^3.1.1",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-reconciler": "^0.7.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.39",
+    "@babel/core": "^7.0.0-beta.39",
+    "@babel/preset-env": "^7.0.0-beta.39",
+    "@babel/preset-react": "^7.0.0-beta.39",
+    "@babel/preset-stage-0": "^7.0.0-beta.39",
+    "@babel/register": "^7.0.0-beta.32",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^8.2.1",
+    "babel-jest": "^22.1.0",
+    "babel-loader": "^7.1.2",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
+    "file-loader": "^1.1.6",
+    "glslify-loader": "^1.0.2",
+    "html-webpack-plugin": "^2.30.1",
+    "image-webpack-loader": "^4.0.0",
+    "jest": "^21.2.1",
+    "raw-loader": "^0.5.1",
+    "react-devtools": "^3.1.0",
+    "stateful-react-container-webpack-plugin": "^0.3.2",
+    "webpack": "^3.10.0",
+    "webpack-cli": "^2.0.4",
+    "webpack-dev-server": "^2.11.1"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server"
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "env": {
+      "browser": true,
+      "node": true,
+      "jest": true,
+      "es6": true
+    },
+    "plugins": [
+      "react",
+      "jsx-a11y"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "rules": {
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js"
+          ]
+        }
+      ],
+      "class-methods-use-this": [
+        0
+      ]
+    }
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "modules": false
+        }
+      ],
+      "@babel/preset-react",
+      "@babel/preset-stage-0"
+    ]
+  }
+}
