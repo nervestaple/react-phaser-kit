@@ -1,55 +1,36 @@
 const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const StatefulReactContainerPlugin = require('stateful-react-container-webpack-plugin');
+const pkg = require('./package.json');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+const libraryName = pkg.name;
 
 const config = {
-  entry: [
-    './example/example.js',
-  ],
+  entry: path.join(__dirname, '/src/index.js'),
   devtool: 'source-map',
-  watch: true,
-  watchOptions: { aggregateTimeout: 500, poll: 1000 },
+  output: {
+    path: path.join(__dirname, '/lib'),
+    filename: `${libraryName}.min.js`,
+    library: libraryName,
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
+  },
   module: {
     rules: [
       {
         test: /\.js$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
-        include: /(src|example)/,
-        use: { loader: 'babel-loader' },
       },
-      { test: /\.(glsl|frag|vert)$/, loader: 'raw-loader' },
-      { test: /\.(glsl|frag|vert)$/, loader: 'glslify-loader' },
       {
-        test: /\.(gif|png|jpe?g|svg)$/i,
-        use: [
-          'file-loader',
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              bypassOnDebug: true,
-            },
-          },
-        ],
+        test: /\.js$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
       },
     ],
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        DEBUG: JSON.stringify(process.env.DEBUG),
-      },
-      CANVAS_RENDERER: JSON.stringify(true),
-      WEBGL_RENDERER: JSON.stringify(true),
-    }),
-    new HtmlWebpackPlugin(),
-    new StatefulReactContainerPlugin({ noState: true }),
+    new UglifyJsPlugin(),
   ],
-  output: {
-    path: path.join(__dirname, '/dist'),
-    filename: 'main.js',
-  },
 };
 
 module.exports = config;

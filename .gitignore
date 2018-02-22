@@ -1,5 +1,6 @@
 # Don't check auto-generated stuff into git
 dist
+lib
 node_modules
 
 # Cruft

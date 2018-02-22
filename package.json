@@ -2,9 +2,11 @@
   "name": "react-phaser-kit",
   "version": "0.0.1",
   "description": "React component kit for Phaser game engine",
-  "main": "src/index.js",
-  "author": "Jim <nervestaple@gmail.com>",
-  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nervestaple/react-phaser-kit.git"
+  },
   "dependencies": {
     "fbjs": "^0.8.16",
     "lodash": "^4.17.4",
@@ -27,6 +29,7 @@
     "babel-loader": "^7.1.2",
     "eslint": "^4.9.0",
     "eslint-config-airbnb": "^16.1.0",
+    "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
@@ -38,12 +41,14 @@
     "raw-loader": "^0.5.1",
     "react-devtools": "^3.1.0",
     "stateful-react-container-webpack-plugin": "^0.3.2",
+    "uglifyjs-webpack-plugin": "^1.2.0",
     "webpack": "^3.10.0",
     "webpack-cli": "^2.0.4",
     "webpack-dev-server": "^2.11.1"
   },
   "scripts": {
-    "dev": "webpack-dev-server"
+    "build": "webpack-dev-server --config webpack.config.dev.js",
+    "dev": "webpack-dev-server --config webpack.config.dev.js"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
@@ -90,5 +95,18 @@
       "@babel/preset-react",
       "@babel/preset-stage-0"
     ]
-  }
+  },
+  "author": "Jim McGee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nervestaple/react-phaser-kit/issues"
+  },
+  "homepage": "https://github.com/nervestaple/react-phaser-kit#readme",
+  "keywords": [
+    "react",
+    "phaser",
+    "game",
+    "engine",
+    "sprite"
+  ]
 }
