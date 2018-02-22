@@ -2,6 +2,8 @@
 
 a (currently minimal) set of ReactDOM components used to render a Phaser 3 scene.
 
+![Image of example code in browser](https://i.imgur.com/LR5BQgp.png)
+
 see [`example/example.js`](example/example.js) for a showcase / usage experimentation.
 
 extremely in flux. still not even importable thru npm.
