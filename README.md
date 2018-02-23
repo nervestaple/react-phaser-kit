@@ -2,6 +2,8 @@
 
 a (currently minimal) set of ReactDOM components used to render a Phaser 3 scene.
 
+[check out the demo!!!](https://nervestaple.github.io/react-phaser-kit/dist/)
+
 ![Image of example code in browser](https://i.imgur.com/LR5BQgp.png)
 
 see [`example/example.js`](example/example.js) for a showcase / usage experimentation.
