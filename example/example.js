@@ -74,7 +74,7 @@ class GameExample extends React.Component {
                       y={this.state.characterPosition.y}
                     />
                     <Text style={{ fontSize: 18 }}>
-                      {`Use arrow keys to move lone shroom. FPS: ${this.state.fps}`}
+                      {`Use WASD to move lone shroom. FPS: ${this.state.fps}`}
                     </Text>
                   </React.Fragment>
                 )}
