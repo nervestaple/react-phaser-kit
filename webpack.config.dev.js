@@ -3,13 +3,12 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StatefulReactContainerPlugin = require('stateful-react-container-webpack-plugin');
 
+
 const config = {
   entry: [
     './example/example.js',
   ],
   devtool: 'source-map',
-  watch: true,
-  watchOptions: { aggregateTimeout: 500, poll: 1000 },
   module: {
     rules: [
       {
@@ -53,8 +52,13 @@ const config = {
   ],
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: 'main.js',
+    filename: 'example.min.js',
   },
 };
+
+if (process.env.WEBPACK_WATCH === 'true') {
+  config.watch = true;
+  config.watchOptions = { aggregateTimeout: 500, poll: 1000 };
+}
 
 module.exports = config;

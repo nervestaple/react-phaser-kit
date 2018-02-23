@@ -1,4 +1,7 @@
 node_modules
+dist
+src
 example
 npm-debug.log
 .DS_Store
+webpack.config*.js

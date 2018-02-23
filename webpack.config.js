@@ -14,6 +14,13 @@ const config = {
     libraryTarget: 'umd',
     umdNamedDefine: true,
   },
+  externals: {
+    react: 'react',
+    phaser: 'phaser',
+    lodash: 'lodash',
+    events: 'events',
+    'prop-types': 'prop-types',
+  },
   module: {
     rules: [
       {
