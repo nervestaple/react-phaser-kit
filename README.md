@@ -6,9 +6,9 @@ a (currently minimal) set of ReactDOM components used to render a Phaser 3 scene
 
 ![Image of example code in browser](https://i.imgur.com/LR5BQgp.png)
 
-i need better example code but here's (sort of) example.js for now:
-```        
-<Game assets={[mushroom]} width={originalWidth} height={originalHeight}>
+i need better example code but here's part of [`example/example.js`](example/example.js) for now:
+```jsx
+<Game assets={[mushroom]}>
   <Ticker
     onTick={({ delta, keys }) => this.setState(({ characterPosition }) => ({
       characterPosition: calcNewPosition({ position: characterPosition, keys }),
