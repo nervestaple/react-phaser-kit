@@ -91,7 +91,10 @@ class GameExample extends React.Component {
           }}
         >
           <span style={{ margin: 8 }}>
-            <a href="https://github.com/nervestaple/react-phaser-kit">
+            <a
+              style={{ color: 'pink' }}
+              href="https://github.com/nervestaple/react-phaser-kit"
+            >
               Back to react-phaser-kit repo
             </a>
           </span>
