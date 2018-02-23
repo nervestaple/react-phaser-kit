@@ -63,11 +63,14 @@ class Ticker extends React.Component {
   // TODO: decide whether to use render-func or onTick prop. leaning towards onTick prop
   render() {
     const { time, delta } = this.state;
-    return this.props.children({
-      time,
-      delta,
-      keys: this.getKeysDown(),
-    });
+    if (this.props.children) {
+      return this.props.children({
+        time,
+        delta,
+        keys: this.getKeysDown(),
+      });
+    }
+    return null;
   }
 }
 
