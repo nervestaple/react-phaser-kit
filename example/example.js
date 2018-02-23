@@ -90,6 +90,11 @@ class GameExample extends React.Component {
             left: 16,
           }}
         >
+          <span style={{ margin: 8 }}>
+            <a href="https://github.com/nervestaple/react-phaser-kit">
+              Back to react-phaser-kit repo
+            </a>
+          </span>
           <span style={{ margin: 8 }}>DOM elements for UI!</span>
           <button onClick={() => this.setState({ characterPosition: { x: 100, y: 100 } })}>
             Reset Shroom
