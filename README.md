@@ -2,6 +2,19 @@
 
 a (currently minimal) set of ReactDOM components used to render a Phaser 3 scene.
 
+Open questions:
+ - Does it even make sense to trigger React render using a Phaser gameloop?
+ - Is there any way to get React-y benefits than keeping things like character position in state? You could just keep character state internally as a class property and render manually on change, but the whole point of this exercise was being able to reason about the entire game state tree at once! Seems like I might as well just use regular Phaser in that case
+ - Right now components like [`Sprite`](src/components/Sprite.js) do their 'rendering' (assigning props to Phaser entities) in `componentWillReceiveProps`:
+   ```
+    if (this.props.y !== nextProps.y) {
+      this.sprite.y = nextProps.y;
+    }
+    ```
+    maybe it would make more sense to render in `render()` and use `shouldComponentUpdate()`?
+ - Would it make more sense to use a custom React-fiber renderer instead of overloading ReactDOM components? I tried that before and didn't see much benefit
+ - IS THIS ALL FOLLY?
+
 [check out the demo!!!](https://nervestaple.github.io/react-phaser-kit/dist/)
 
 ![Image of example code in browser](https://i.imgur.com/LR5BQgp.png)
