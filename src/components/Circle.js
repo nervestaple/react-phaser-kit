@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Phaser from 'phaser';
 
-class Circle extends React.Component {
+class Circle extends React.PureComponent {
   static defaultProps = {
     x: 0,
     y: 0,
@@ -26,20 +26,9 @@ class Circle extends React.Component {
     this.context.graphics.strokeCircleShape(this.circle);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.x !== nextProps.x) {
-      this.circle.x = nextProps.x;
-    }
-    if (this.props.y !== nextProps.y) {
-      this.circle.y = nextProps.y;
-    }
-    if (this.props.radius !== nextProps.radius) {
-      this.circle.radius = nextProps.radius;
-    }
-    this.context.graphics.strokeCircleShape(this.circle);
-  }
-
   render() {
+    Object.assign(this.circle, this.props);
+    this.context.graphics.strokeCircleShape(this.circle);
     return null;
   }
 }

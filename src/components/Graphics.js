@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Graphics extends React.Component {
+class Graphics extends React.PureComponent {
   static defaultProps = {
     lineStyle: null,
     fillStyle: null,

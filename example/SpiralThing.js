@@ -3,19 +3,20 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import { Sprite, Graphics, Circle } from '../src';
+import ConcentricCircles from './ConcentricCircles';
 import mushroom from './mushroom2.png';
 
 const SpiralThing = ({ x, y, time }) => (
   <React.Fragment>
     <Graphics lineStyle={{ width: 19, color: 0x11ff33 }}>
-      {_.range(1, 6).map(n => (
-        <Circle
-          key={n}
-          x={x}
-          y={y}
-          radius={n * (50 + (10 * Math.sin((time / 100))))}
-        />
-      ))}
+      <ConcentricCircles x={x} y={y} radius={50 + (10 * Math.sin((time / 100)))} num={5} />
+    </Graphics>
+    <Graphics lineStyle={{ width: 8, color: 0xffff33 }}>
+      <Circle
+        x={x}
+        y={y}
+        radius={300 + (10 * Math.sin((time / 100)))}
+      />
     </Graphics>
     {_.range(1, 20).map(n => (
       <Sprite
@@ -28,10 +29,16 @@ const SpiralThing = ({ x, y, time }) => (
   </React.Fragment>
 );
 
+SpiralThing.defaultProps = {
+  x: 0,
+  y: 0,
+  time: 0,
+};
+
 SpiralThing.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  time: PropTypes.number.isRequired,
+  x: PropTypes.number,
+  y: PropTypes.number,
+  time: PropTypes.number,
 };
 
 export default SpiralThing;

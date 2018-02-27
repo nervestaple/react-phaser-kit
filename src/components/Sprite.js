@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Sprite extends React.Component {
+class Sprite extends React.PureComponent {
   static defaultProps = {
     x: 0,
     y: 0,
@@ -32,11 +32,6 @@ class Sprite extends React.Component {
     }
   }
 
-  /*
-    does this make sense? techically using componentWillReceiveProps()
-    as a 'render' func here. could use shouldComponentUpdate() and render()
-    to set updated props, but then couldn't optionally set single properties like we do here
-  */
   componentWillReceiveProps(nextProps) {
     if (!this.props.onClick && nextProps.onClick) {
       this.setOnClick(nextProps.onClick);
@@ -58,6 +53,9 @@ class Sprite extends React.Component {
   }
 
   render() {
+    const { x, y, scale } = this.props;
+    const newProps = { x, y, scale: { x: scale, y: scale } };
+    Object.assign(this.sprite, newProps);
     return null;
   }
 }

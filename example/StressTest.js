@@ -47,7 +47,7 @@ class StressTest extends React.Component {
           width={this.originalWidth}
           height={this.originalHeight}
         >
-          <Text style={{ fontSize: 18 }}>
+          <Text textStyle={{ fontSize: 18 }}>
             {`Use WASD to move lone shroom.  FPS: ${this.state.fps}`}
           </Text>
           <Ticker
