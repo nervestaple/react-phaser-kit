@@ -5,7 +5,17 @@ import _ from 'lodash';
 const shallowEquals = (a, b) => {
   const keysA = _.keys(a);
   const keysB = _.keys(b);
-  console.log({ a, b, keysA, keysB, ' _.union(keysA, keysB)':  _.union(keysA, keysB), ' _.union(keysA, keysB).every(k => a[k] === b[k])':  _.union(keysA, keysB).every(k => { console.log({ k, a, b, 'a[k]': a[k], 'b[k]': b[k] }); return a[k] === b[k]; }) });
+  // console.log({
+  //   a,
+  //   b,
+  //   keysA,
+  //   keysB,
+  //   ' _.union(keysA, keysB)':  _.union(keysA, keysB),
+  //   ' _.union(keysA, keysB).every(k => a[k] === b[k])':  _.union(keysA, keysB).every(k => {
+  //    console.log({ k, a, b, 'a[k]': a[k], 'b[k]': b[k] });
+  //    return a[k] === b[k];
+  // })
+  // });
   if (keysA.length !== keysB.length) {
     return false;
   }
@@ -18,7 +28,7 @@ class Text extends React.PureComponent {
   static defaultProps = {
     x: 0,
     y: 0,
-    textS: {
+    textStyle: {
       fontFamily: 'Helvetica',
       fontSize: 48,
       fill: '#ffffff',
@@ -29,7 +39,7 @@ class Text extends React.PureComponent {
   static propTypes = {
     x: PropTypes.number,
     y: PropTypes.number,
-    textS: PropTypes.shape({
+    textStyle: PropTypes.shape({
       fontFamily: PropTypes.string,
       fontSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       fill: PropTypes.string,
@@ -46,10 +56,10 @@ class Text extends React.PureComponent {
     const {
       x,
       y,
-      textS,
+      textStyle,
       children,
     } = props;
-    this.text = context.scene.add.text(x, y, children, textS);
+    this.text = context.scene.add.text(x, y, children, textStyle);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -59,9 +69,8 @@ class Text extends React.PureComponent {
     if (this.props.y !== nextProps.y) {
       this.text.y = nextProps.y;
     }
-    if (!shallowEquals(this.props.textS, nextProps.textS)) {
-      console.log('setStyle');
-      this.text.setStyle(nextProps.textS);
+    if (!shallowEquals(this.props.textStyle, nextProps.textStyle)) {
+      this.text.setStyle(nextProps.textStyle);
     }
     if (this.props.children !== nextProps.children) {
       this.text.setText(nextProps.children);
