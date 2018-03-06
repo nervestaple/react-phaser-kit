@@ -1,16 +1,18 @@
+import _ from 'lodash';
+
 import Instance from './Instance';
 import { SPRITE } from '../instanceTypes';
 
 class Sprite extends Instance {
   constructor(props, host) {
     super(props, host);
-    console.log('new Sprite()', { props, host, this: this });
 
     this.sprite = host.add.sprite(
       props.x || 0,
       props.y || 0,
       props.image,
     );
+    this.commitUpdate({ added: props });
   }
 
   object() {
@@ -21,24 +23,40 @@ class Sprite extends Instance {
     return SPRITE;
   }
 
-  update(props, diff) {
-    super.update(props, diff);
+  setOnClick(onClick) {
+    this.sprite = this.sprite.setInteractive();
+    this.sprite.on('pointerdown', onClick);
+    this.currentOnClick = onClick;
+  }
 
-    this.sprite.x = props.x || 0;
-    this.sprite.y = props.y || 0;
-
-    if (props.width) {
-      this.sprite.width = props.width;
-    }
-
-    if (props.height) {
-      this.sprite.height = props.height;
-    }
+  removeOnClick() {
+    this.sprite.off('pointerdown', this.currentOnClick);
+    delete this.currentOnClick;
   }
 
   commitUpdate({ added, modified, removed }) {
+    _.forEach(added, (value, prop) => {
+      if (prop === 'onClick') {
+        this.setOnClick(added.onClick);
+      } else if (prop === 'tint') {
+        this.sprite.setTint(value);
+      }
+    });
+
     _.forEach(modified, (value, prop) => {
-      this.sprite[prop] = value;
+      if (prop === 'tint') {
+        this.sprite.setTint(value);
+      } else {
+        this.sprite[prop] = value;
+      }
+    });
+
+    _.forEach(removed, (prop) => {
+      if (prop === 'onClick') {
+        this.removeOnClick();
+      } else if (prop === 'tint') {
+        this.sprite.clearTint();
+      }
     });
   }
 }
