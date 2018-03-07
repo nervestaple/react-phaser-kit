@@ -4,7 +4,6 @@ import ReactFiberReconciler from 'react-reconciler';
 import now from 'performance-now';
 import _ from 'lodash';
 
-import { TEXT } from './instanceTypes';
 import createInstance from './createInstance';
 
 const reconcilerConfig = {
@@ -31,6 +30,7 @@ const reconcilerConfig = {
   createInstance,
 
   appendInitialChild(parentInstance, child) {
+    parentInstance.appendInitialChild(child);
   },
 
   finalizeInitialChildren(instance, type, props, rootContainerInstance) {
@@ -38,7 +38,7 @@ const reconcilerConfig = {
   },
 
   prepareUpdate(instance, type, oldProps, newProps, rootContainerInstance, hostContext) {
-    return instance.prepareUpdate(oldProps, newProps, { allowChildren: type === TEXT });
+    return instance.prepareUpdate(oldProps, newProps, { allowChildren: type === 'text' });
   },
 
   createTextInstance(text, rootContainerInstance, hostContext, internalInstanceHandle) {},
@@ -81,15 +81,21 @@ const reconcilerConfig = {
     //   textInstance.nodeValue = newText;
     // },
 
-    appendChild(parentInstance, child) {},
+    appendChild(parentInstance, child) {
+      parentInstance.appendChild(child);
+    },
 
     appendChildToContainer(container, child) {},
 
-    insertBefore(parentInstance, child, beforeChild) {},
+    insertBefore(parentInstance, child, beforeChild) {
+      parentInstance.insertBefore(child, beforeChild);
+    },
 
     insertInContainerBefore(container, child, beforeChild) {},
 
-    removeChild(parentInstance, child) {},
+    removeChild(parentInstance, child) {
+      parentInstance.removeChild(child);
+    },
 
     removeChildFromContainer(container, child) {},
   },

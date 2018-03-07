@@ -82,6 +82,21 @@
       ],
       "class-methods-use-this": [
         0
+      ],
+      "object-curly-newline": [
+        "error",
+        {
+          "ObjectExpression": {
+            "minProperties": 5,
+            "multiline": true,
+            "consistent": true
+          },
+          "ObjectPattern": {
+            "minProperties": 5,
+            "multiline": true,
+            "consistent": true
+          }
+        }
       ]
     }
   },

@@ -1,9 +1,5 @@
 import _ from 'lodash';
 
-// const mapKeysToObject = (keys, accessedObject) => (
-//   keys.reduce((acc, key) => ({ ...acc, [key]: accessedObject[key] }), {})
-// );
-
 class Instance {
   constructor(props, host) {
     this.scene = host;
@@ -13,11 +9,13 @@ class Instance {
     return this.phaserObject || {};
   }
 
-  finalizeInitialChildren(props) {
-    this.applyProps(props);
+  type() {
+    return this.type;
   }
 
-  applyProps() {}
+  finalizeInitialChildren(props) {
+    this.commitUpdate({ added: props });
+  }
 
   commitUpdate({ added, modified, removed }) {
     _.forEach({ added, modified, removed }, (diffValues, diffType) => (
@@ -30,6 +28,7 @@ class Instance {
         }
       })
     ));
+    this.update();
   }
 
   appendInitialChild() {}
@@ -74,6 +73,8 @@ class Instance {
     }
     return null;
   }
+
+  update() {}
 }
 
 export default Instance;

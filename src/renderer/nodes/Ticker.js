@@ -1,10 +1,12 @@
 import Instance from './Instance';
-import { TICKER } from '../instanceTypes';
 
 class Ticker extends Instance {
+  static type = 'ticker';
+
   constructor(props, host) {
     super(props, host);
-
+    this.setOnTick = ::this.setOnTick;
+    this.removeOnTick = ::this.removeOnTick;
     this.handlers = {
       added: {
         onTick: this.setOnTick,
@@ -16,25 +18,19 @@ class Ticker extends Instance {
         onTick: this.removeOnTick,
       },
     };
-
-    this.commitUpdate({ added: props });
   }
 
-  setOnTick = (onTick) => {
+  setOnTick(onTick) {
     this.removeOnTick();
     this.scene.ticker.on('tick', onTick);
     this.currentOnTick = onTick;
-  };
+  }
 
-  removeOnTick = () => {
+  removeOnTick() {
     if (this.currentOnTick) {
       this.scene.ticker.off('tick', this.currentOnTick);
       delete this.currentOnTick;
     }
-  }
-
-  type() {
-    return TICKER;
   }
 }
 

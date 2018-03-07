@@ -1,51 +1,51 @@
 import React from 'react';
 
-import ReactPhaser, { createPhaserGame, Text, Sprite, Ticker } from '../src/renderer';
+import ReactPhaser from '../src/renderer';
 import mushroom from './mushroom2.png';
 
 class Example extends React.Component {
-  state = { x: 100, y: 100, tint: 0xff00000 };
+  state = { time: 0, color: 0xff00000 };
 
-  setRandomTint = () => {
-    this.setState({ tint: Math.random() * 0xffffff });
-  }
+  setRandomColor = () => {
+    this.setState({ color: Math.random() * 0xffffff });
+  };
 
   handleTick = ({ time }) => {
-    this.setState({
-      x: 100 + (10 * Math.sin(((time / 195)))),
-      y: 100 + (10 * Math.cos(((time / 195)))),
-    });
-  }
+    this.setState({ time });
+  };
 
   render() {
+    const { time, color } = this.state;
     return [
-      <Ticker onTick={this.handleTick} />,
-      <Text
-        x={this.state.x + 100}
-        y={this.state.y + 100}
+      <ticker onTick={this.handleTick} />,
+      <text
+        x={25}
+        y={25}
         style={{
           fontFamily: 'Helvetica',
-          fontSize: 48,
+          fontSize: 36,
           fill: '#ffffff',
         }}
       >
-        {`Hello world ${this.state.x}`}
-      </Text>,
-      <Sprite
-        x={this.state.x}
-        y={this.state.y}
+        {`Hello world ${time}`}
+      </text>,
+      <sprite
+        x={200 + (20 * Math.sin(time / 195))}
+        y={200 + (20 * Math.cos(time / 195))}
         image={mushroom}
-        tint={this.state.tint}
-        onClick={this.setRandomTint}
+        tint={color}
+        onClick={this.setRandomColor}
       />,
+      <graphics lineStyle={{ width: 10, color }} x={200} y={200}>
+        <circle radius={100 + (20 * Math.sin(time / 195))} />
+      </graphics>,
     ];
   }
 }
 
-
 const assets = [mushroom];
 const files = assets.map(url => ({ type: 'image', key: url, url }));
-createPhaserGame({
+ReactPhaser.createPhaserGame({
   files,
   parent: document.getElementById('container'),
 }).then((scene) => {

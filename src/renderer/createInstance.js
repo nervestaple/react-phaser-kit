@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
+import assert from 'assert';
+import _ from 'lodash';
 
-import { Sprite, Text, Ticker } from './nodes';
-import { SPRITE, TEXT, TICKER } from './instanceTypes';
+import * as nodes from './nodes';
 
-const instanceTypeHandler = {
-  [SPRITE]: Sprite,
-  [TEXT]: Text,
-  [TICKER]: Ticker,
-};
+assert(_.every(nodes, nodeClass => _.has(nodeClass, 'type')));
+
+const instanceTypeHandler = _.keyBy(nodes, 'type');
 
 function createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
   const InstanceClass = instanceTypeHandler[type];
