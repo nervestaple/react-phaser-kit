@@ -9,11 +9,11 @@ import createInstance from './createInstance';
 
 const reconcilerConfig = {
   getRootHostContext(rootContainerInstance) {
-    return {};
+    return rootContainerInstance;
   },
 
   getChildHostContext(parentHostContext, type) {
-    return {};
+    return parentHostContext;
   },
 
   getPublicInstance(instance) {

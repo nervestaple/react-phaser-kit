@@ -1,36 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Phaser from 'phaser';
-import EventEmitter from 'events';
 
+import createPhaserGame from './createPhaserGame';
 import PhaserRenderer from './PhaserRenderer';
-
-const defaultGameConfig = {};
-
-const createPhaserGame = ({
-  width,
-  height,
-  files,
-  parent,
-}) => new Promise((resolve) => {
-  const ticker = new EventEmitter();
-  return new Phaser.Game({
-    ...defaultGameConfig,
-    ...(width ? { width } : {}),
-    ...(height ? { height } : {}),
-    parent,
-    scene: {
-      files,
-      create() {
-        this.ticker = ticker;
-        resolve(this);
-      },
-      update(time, delta) {
-        ticker.emit('tick', { time, delta });
-      },
-    },
-  });
-});
 
 class Game extends React.Component {
   static defaultProps = {

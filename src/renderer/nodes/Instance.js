@@ -5,7 +5,13 @@ import _ from 'lodash';
 // );
 
 class Instance {
-  object() {}
+  constructor(props, host) {
+    this.scene = host;
+  }
+
+  object() {
+    return this.phaserObject || {};
+  }
 
   finalizeInitialChildren(props) {
     this.applyProps(props);
@@ -13,7 +19,18 @@ class Instance {
 
   applyProps() {}
 
-  commitUpdate() {}
+  commitUpdate({ added, modified, removed }) {
+    _.forEach({ added, modified, removed }, (diffValues, diffType) => (
+      _.forEach(diffValues, (value, prop) => {
+        const handler = _.get(this.handlers, [diffType, prop]);
+        if (handler) {
+          handler(value);
+        } else if (this.phaserObject && (diffType === 'added' || diffType === 'modified')) {
+          this.phaserObject[prop] = value;
+        }
+      })
+    ));
+  }
 
   appendInitialChild() {}
 
@@ -24,22 +41,6 @@ class Instance {
   insertBefore() {}
 
   prepareUpdate(oldProps, newProps, { allowChildren }) {
-    // console.log('Instance.prepareUpdate', { oldProps, newProps });
-
-    // const oldPropKeys = _.keys(oldProps);
-    // const newPropKeys = _.keys(newProps);
-    //
-    // const removed = _.difference(oldPropKeys, newPropKeys);
-    //
-    // const added = mapKeysToObject(_.difference(newPropKeys, oldPropKeys));
-    //
-    // const modified = mapKeysToObject(_.intersection(oldPropKeys, newPropKeys)
-    //   .filter(key => key !== 'children'));
-    //
-    // const diff = { removed, added, modified };
-    //
-    // console.log('Instance.prepareUpdate DONE', diff);
-
     const diff = {
       removed: [],
       added: {},
