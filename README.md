@@ -1,69 +1,50 @@
 # React Phaser Kit
 
-a (currently minimal) set of ReactDOM components used to render a Phaser 3 scene.
+a (raw, unfinished) custom React Fiber renderer for [Phaser 3](https://github.com/photonstorm/phaser/)
 
 Open questions:
- - Does it even make sense to trigger React render using a Phaser gameloop?
- - Is there any way to get React-y benefits than keeping things like character position in state? You could just keep character state internally as a class property and render manually on change, but the whole point of this exercise was being able to reason about the entire game state tree at once! Seems like I might as well just use regular Phaser in that case
- - Right now components like [`Sprite`](src/components/Sprite.js) do their 'rendering' (assigning props to Phaser entities) in `componentWillReceiveProps`:
-   ```
-    if (this.props.y !== nextProps.y) {
-      this.sprite.y = nextProps.y;
-    }
-    ```
-    maybe it would make more sense to render in `render()` and use `shouldComponentUpdate()`?
- - Would it make more sense to use a custom React-fiber renderer instead of overloading ReactDOM components? I tried that before and didn't see much benefit
- - IS THIS ALL FOLLY?
+  - Is React performant enough for this to even make sense?
+    - Initial experiments with 60FPS show `setState`/re-rendering can take under 1ms, so... maybe?
+    - Complex games might be a no-go without optimization
+  - I've been waffling between the custom Fiber renderer approach. and simply doing everything in ReactDOM components.
+    - ReactDOM components is much less complex to implement, easier to read, and mostly does the same stuff (checking props and applying them to phaser objects ('rendering'), sometimes calling phaser functions)
+    - Potential performance optimizations from a custom fiber renderer?
+      - No ReactDOM dependency (unless you want a React UI overlay in DOM which seems like a main reason you'd want to do this anyway)
+
 
 [check out the demo!!!](https://nervestaple.github.io/react-phaser-kit/dist/)
 
 ![Image of example code in browser](https://i.imgur.com/LR5BQgp.png)
 
-i need better example code but here's part of [`example/example.js`](example/example.js) for now:
+i need better example code but here's part of [`example/PhaserExampleComponent.js`](example/PhaserExampleComponent.js) for now:
 ```jsx
-<Game assets={[mushroom]}>
-  <Ticker
-    onTick={({ delta, keys }) => this.setState(({ characterPosition }) => ({
-      characterPosition: calcNewPosition({ position: characterPosition, keys }),
-    }))}
+<React.Fragment>
+  <updater
+    onUpdate={this.handleUpdate}
+    watchKeys={[KeyCodes.W, KeyCodes.A, KeyCodes.S, KeyCodes.D]}
+  />
+  <text
+    x={25}
+    y={25}
+    style={{
+      fontFamily: 'Helvetica',
+      fontSize: 24,
+      fill: '#ffffff',
+    }}
   >
-    {({ time }) => (
-      <Input mouseMove>
-        {({ mousePosition: { x, y } }) => (
-          <React.Fragment>
-            <Graphics lineStyle={{ width: 19, color: 0x11ff33 }}>
-              {_.range(1, 6).map(n => (
-                <Circle
-                  key={n}
-                  x={x}
-                  y={y}
-                  radius={n * (50 + (10 * Math.sin((time / 100))))}
-                />
-              ))}
-            </Graphics>
-            {_.range(1, 20).map(n => (
-              <Sprite
-                key={n}
-                image={mushroom}
-                x={x + (10 * n * Math.sin(((time / 195)) + n))}
-                y={y + (10 * n * Math.cos(((time / 200)) + n))}
-              />
-            ))}
-            <Sprite
-              image={mushroom}
-              onClick={console.log}
-              x={this.state.characterPosition.x}
-              y={this.state.characterPosition.y}
-            />
-            <Text style={{ fontSize: 18 }}>
-              {`Use WASD to move lone shroom. FPS: ${this.state.fps}`}
-            </Text>
-          </React.Fragment>
-        )}
-      </Input>
-    )}
-  </Ticker>
-</Game>
+    {`Hello world ${Math.round(this.state.time, 1000)}`}
+  </text>
+  <sprite
+    x={this.state.x + (30 * Math.sin(this.state.time / 195))}
+    y={this.state.y + (30 * Math.cos(this.state.time / 195))}
+    image={mushroom}
+    tint={color}
+    onClick={this.setRandomColor}
+  />
+  <graphics lineStyle={{ width: 10, color }} x={this.state.x} y={this.state.y}>
+    <circle radius={120 + (20 * Math.sin(this.state.time / 195))} />
+  </graphics>
+</React.Fragment>
 ```
 
 see [`example/example.js`](example/example.js) for a showcase / usage experimentation.
