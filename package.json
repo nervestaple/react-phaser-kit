@@ -83,6 +83,9 @@
       "class-methods-use-this": [
         0
       ],
+      "import/no-named-as-default-member": [
+        0
+      ],
       "object-curly-newline": [
         "error",
         {
@@ -97,7 +100,8 @@
             "consistent": true
           }
         }
-      ]
+      ],
+      "no-confusing-arrow": ["error", {"allowParens": true}]
     }
   },
   "babel": {

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import createPhaserGame from './createPhaserGame';
-import PhaserRenderer from './PhaserRenderer';
+import createPhaserGame from '../createPhaserGame';
+import PhaserRenderer from '../PhaserRenderer';
 
 class Game extends React.Component {
   static defaultProps = {
@@ -35,23 +35,20 @@ class Game extends React.Component {
     } = this.props;
 
     const files = assets.map(url => ({ type: 'image', key: url, url }));
-    createPhaserGame({
-      width,
-      height,
-      files,
-      parent: this.phaserContainerRef,
-    }).then((scene) => {
-      this.scene = scene;
-      this.mountNode = PhaserRenderer.createContainer(this.scene);
-      PhaserRenderer.updateContainer(this.props.children, this.mountNode, this);
 
-      PhaserRenderer.injectIntoDevTools({
-        findFiberByHostInstance: PhaserRenderer.findFiberByHostInstance,
-        bundleType: 1,
-        version: '0.0.2',
-        rendererPackageName: 'react-phaser-kit',
+    createPhaserGame({ width, height, files, parent: this.phaserContainerRef })
+      .then((scene) => {
+        this.scene = scene;
+        this.mountNode = PhaserRenderer.createContainer(this.scene);
+        PhaserRenderer.updateContainer(this.props.children, this.mountNode, this);
+
+        PhaserRenderer.injectIntoDevTools({
+          findFiberByHostInstance: PhaserRenderer.findFiberByHostInstance,
+          bundleType: 1,
+          version: '0.0.2',
+          rendererPackageName: 'react-phaser-kit',
+        });
       });
-    });
   }
 
   componentDidUpdate() {

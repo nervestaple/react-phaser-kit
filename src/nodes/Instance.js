@@ -3,6 +3,9 @@ import _ from 'lodash';
 class Instance {
   constructor(props, host) {
     this.scene = host;
+    this.applyProp = ::this.applyProp;
+    this.removeProp = ::this.removeProp;
+    this.tryHandleProp = ::this.tryHandleProp;
   }
 
   object() {
@@ -17,17 +20,31 @@ class Instance {
     this.commitUpdate({ added: props });
   }
 
+  tryHandleProp(diffType, prop, value) {
+    const handler = _.get(this.handlers, [diffType, prop]);
+    if (handler) {
+      handler(value);
+      return true;
+    }
+    return false;
+  }
+
+  applyProp(diffType, prop, value) {
+    const didHandleProp = this.tryHandleProp(diffType, prop, value);
+    if (!didHandleProp) {
+      this.phaserObject[prop] = value;
+    }
+  }
+
+  removeProp(prop) {
+    this.tryHandleProp('removed', prop);
+  }
+
   commitUpdate({ added, modified, removed }) {
-    _.forEach({ added, modified, removed }, (diffValues, diffType) => (
-      _.forEach(diffValues, (value, prop) => {
-        const handler = _.get(this.handlers, [diffType, prop]);
-        if (handler) {
-          handler(value);
-        } else if (this.phaserObject && (diffType === 'added' || diffType === 'modified')) {
-          this.phaserObject[prop] = value;
-        }
-      })
+    _.forEach({ added, modified }, (diffValues, diffType) => (
+      _.forEach(diffValues, (value, prop) => this.applyProp(diffType, prop, value))
     ));
+    _.forEach(removed, this.removeProp);
     this.update();
   }
 
@@ -59,11 +76,11 @@ class Instance {
     });
 
     Object.keys(oldProps).forEach((oldProp) => {
-      if (
-        _.has(newProps, oldProp) &&
-        oldProps[oldProp] !== newProps[oldProp] &&
-        (oldProp !== 'children' || allowChildren)
-      ) {
+      const propStillExists = _.has(newProps, oldProp);
+      const propsAreEqual = this.checkPropEqual(oldProp, oldProps[oldProp], newProps[oldProp]);
+      const propIsNotChildren = oldProp !== 'children' || allowChildren;
+
+      if (propStillExists && !propsAreEqual && propIsNotChildren) {
         diff.modified[oldProp] = newProps[oldProp];
       }
     });
@@ -72,6 +89,10 @@ class Instance {
       return diff;
     }
     return null;
+  }
+
+  checkPropEqual(prop, oldPropValue, newPropValue) {
+    return oldPropValue === newPropValue;
   }
 
   update() {}

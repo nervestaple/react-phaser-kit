@@ -38,6 +38,7 @@ class Sprite extends Instance {
 
   removeOnClick() {
     if (this.currentOnClick) {
+      this.scene.input.clear(this.sprite);
       this.sprite.off('pointerdown', this.currentOnClick);
       delete this.currentOnClick;
     }

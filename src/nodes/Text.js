@@ -1,4 +1,12 @@
+import _ from 'lodash';
+
 import Instance from './Instance';
+
+const dePxify = pxValue => (
+  _.endsWith(pxValue, 'px') ? parseInt(pxValue.substr(0, pxValue.length - 2), 10) : pxValue
+);
+
+const isStyleValueEqual = (a, b) => dePxify(a) === dePxify(b);
 
 class Text extends Instance {
   static type = 'text';
@@ -21,6 +29,16 @@ class Text extends Instance {
         style: value => this.text.setStyle(value),
       },
     };
+  }
+
+  checkPropEqual(prop, oldPropValue, newPropValue) {
+    if (prop === 'style') {
+      return _.every(
+        oldPropValue,
+        (oldValue, key) => isStyleValueEqual(oldValue, newPropValue[key]),
+      );
+    }
+    return oldPropValue === newPropValue;
   }
 }
 

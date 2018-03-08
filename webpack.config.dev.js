@@ -1,13 +1,18 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const StatefulReactContainerPlugin = require('stateful-react-container-webpack-plugin');
-
 
 const config = {
-  entry: [
-    './example/example.js',
-  ],
+  entry: {
+    vendor: ['react', 'react-reconciler', 'phaser', 'lodash', 'events', 'prop-types', 'performance-now'],
+    reactPhaserExample: './example/reactPhaserExample.js',
+    reactDOMExample: './example/reactDOMExample.js',
+  },
+  devServer: {
+    historyApiFallback: {
+      index: '/dist/index.html',
+    },
+  },
   devtool: 'source-map',
   module: {
     rules: [
@@ -22,7 +27,12 @@ const config = {
       {
         test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
-          'file-loader',
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: '/',
+            },
+          },
           {
             loader: 'image-webpack-loader',
             options: {
@@ -39,6 +49,10 @@ const config = {
     ],
   },
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: Infinity,
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
@@ -47,12 +61,31 @@ const config = {
       CANVAS_RENDERER: JSON.stringify(true),
       WEBGL_RENDERER: JSON.stringify(true),
     }),
-    new HtmlWebpackPlugin(),
-    new StatefulReactContainerPlugin({ noState: true }),
+    new HtmlWebpackPlugin({
+      title: 'ReactPhaser examples',
+      inject: true,
+      chunks: [],
+      template: './example/indexTemplate.html',
+      filename: './dist/index.html',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Example with ReactPhaser rendering',
+      inject: true,
+      chunks: ['vendor', 'reactPhaserExample'],
+      template: './example/exampleTemplate.html',
+      filename: './dist/reactPhaserExample.html',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Example with ReactDOM/hybrid rendering',
+      inject: true,
+      chunks: ['vendor', 'reactDOMExample'],
+      template: './example/exampleTemplate.html',
+      filename: './dist/reactDOMExample.html',
+    }),
   ],
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: 'example.min.js',
+    filename: '[name].[chunkhash].min.js',
   },
 };
 
