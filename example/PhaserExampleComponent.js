@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 
 import PulsarThing from './PulsarThing';
 import SpiralThing from './SpiralThing';
+import FPSCounter from './FPSCounter';
 
 const { Input: { Keyboard: { KeyCodes } } } = Phaser;
 const INCREMENT = 5;
@@ -35,7 +36,6 @@ class PhaserExampleComponent extends React.Component {
 
   render() {
     const { time, position, mousePosition } = this.state;
-    const roundedTime = Math.round(time / 1000);
     return (
       <React.Fragment>
         <updater
@@ -43,17 +43,7 @@ class PhaserExampleComponent extends React.Component {
           watchKeys={[KeyCodes.W, KeyCodes.A, KeyCodes.S, KeyCodes.D]}
         />
         <input onMouseMove={this.handleMouseMove} />
-        <text
-          x={25}
-          y={25}
-          style={{
-            fontFamily: 'Helvetica',
-            fontSize: 24,
-            fill: '#ffffff',
-          }}
-        >
-          {`Hello world ${roundedTime}`}
-        </text>
+        <FPSCounter />
         <PulsarThing x={position.x} y={position.y} time={time} />
         <SpiralThing
           x={mousePosition.x}
