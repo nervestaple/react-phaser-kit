@@ -8,11 +8,6 @@ const config = {
     reactPhaserExample: './example/reactPhaserExample.js',
     reactDOMExample: './example/reactDOMExample.js',
   },
-  devServer: {
-    historyApiFallback: {
-      index: '/dist/index.html',
-    },
-  },
   devtool: 'source-map',
   module: {
     rules: [
@@ -66,21 +61,21 @@ const config = {
       inject: true,
       chunks: [],
       template: './example/indexTemplate.html',
-      filename: './dist/index.html',
+      filename: 'index.html',
     }),
     new HtmlWebpackPlugin({
       title: 'Example with ReactPhaser rendering',
       inject: true,
       chunks: ['vendor', 'reactPhaserExample'],
       template: './example/exampleTemplate.html',
-      filename: './dist/reactPhaserExample.html',
+      filename: 'reactPhaserExample.html',
     }),
     new HtmlWebpackPlugin({
       title: 'Example with ReactDOM/hybrid rendering',
       inject: true,
       chunks: ['vendor', 'reactDOMExample'],
       template: './example/exampleTemplate.html',
-      filename: './dist/reactDOMExample.html',
+      filename: 'reactDOMExample.html',
     }),
   ],
   output: {
