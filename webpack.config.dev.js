@@ -24,9 +24,6 @@ const config = {
         use: [
           {
             loader: 'file-loader',
-            options: {
-              publicPath: '/',
-            },
           },
           {
             loader: 'image-webpack-loader',
