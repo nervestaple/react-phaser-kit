@@ -10,6 +10,7 @@ Open questions:
     - ReactDOM components is much less complex to implement, easier to read, and mostly does the same stuff (checking props and applying them to phaser objects ('rendering'), sometimes calling phaser functions)
     - Potential performance optimizations from a custom fiber renderer?
       - No ReactDOM dependency (unless you want a React UI overlay in DOM which seems like a main reason you'd want to do this anyway)
+      - Update: custom renderer is much more performant. why???
 
 
 [check out the demo!!!](https://nervestaple.github.io/react-phaser-kit/dist/)
