@@ -1,5 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
+
+import { getDiff, renderToPhaser, fixPxProps } from '../renderUtils';
+
 
 class Text extends React.Component {
   static defaultProps = {
@@ -28,33 +32,54 @@ class Text extends React.Component {
     scene: PropTypes.object,
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const fixedPrevProps = fixPxProps(_.get(prevState, 'props', {}));
+    return {
+      diff: getDiff(fixedPrevProps, nextProps),
+      props: nextProps,
+    };
+  }
+
   constructor(props, context) {
     super(props, context);
-    const {
-      x,
-      y,
-      style,
-      children,
-    } = props;
+    this.setPhaserObject = ::this.setPhaserObject;
+
+    const { x, y, style, children } = props;
     this.text = context.scene.add.text(x, y, children, style);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.x !== nextProps.x) {
-      this.text.x = nextProps.x;
+  state = { diff: {} };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { diff: { added, modified, removed } } = nextState;
+    if (_.isEmpty(added) && _.isEmpty(modified) && removed.length === 0) {
+      return false;
     }
-    if (this.props.y !== nextProps.y) {
-      this.text.y = nextProps.y;
-    }
-    if (this.props.style !== nextProps.style) {
-      this.text.setStyle(nextProps.style);
-    }
-    if (this.props.children !== nextProps.children) {
-      this.text.setText(nextProps.children);
-    }
+    return true;
   }
 
+  setPhaserObject(prop, value) {
+    this.text[prop] = value;
+  }
+
+  handlers = {
+    added: {
+      children: value => this.text.setText(value),
+      style: value => this.text.setStyle(value),
+    },
+    modified: {
+      children: value => this.text.setText(value),
+      style: value => this.text.setStyle(value),
+    },
+  };
+
   render() {
+    renderToPhaser({
+      setPhaserObject: this.setPhaserObject,
+      diff: this.state.diff,
+      handlers: this.handlers,
+    });
+
     return null;
   }
 }

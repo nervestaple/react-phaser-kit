@@ -8,11 +8,14 @@
     "url": "git+https://github.com/nervestaple/react-phaser-kit.git"
   },
   "dependencies": {
+    "fbjs": "^0.8.16",
     "lodash": "^4.17.4",
+    "performance-now": "^2.1.0",
     "phaser": "^3.1.1",
     "prop-types": "^15.6.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react": "^16.4.0-alpha.0911da3",
+    "react-dom": "^16.4.0-alpha.0911da3",
+    "react-reconciler": "^0.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.40",
@@ -79,6 +82,30 @@
       ],
       "class-methods-use-this": [
         0
+      ],
+      "import/no-named-as-default-member": [
+        0
+      ],
+      "object-curly-newline": [
+        "error",
+        {
+          "ObjectExpression": {
+            "minProperties": 5,
+            "multiline": true,
+            "consistent": true
+          },
+          "ObjectPattern": {
+            "minProperties": 5,
+            "multiline": true,
+            "consistent": true
+          }
+        }
+      ],
+      "no-confusing-arrow": [
+        "error",
+        {
+          "allowParens": true
+        }
       ]
     }
   },

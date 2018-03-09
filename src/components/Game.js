@@ -14,7 +14,7 @@ const createPhaserGame = ({
   files,
   parent,
 }) => new Promise((resolve) => {
-  const ticker = new EventEmitter();
+  const updater = new EventEmitter();
   return new Phaser.Game({
     ...gameConfig,
     ...(width ? { width } : {}),
@@ -23,11 +23,11 @@ const createPhaserGame = ({
     scene: {
       files,
       create() {
-        this.ticker = ticker;
+        this.updater = updater;
         resolve(this);
       },
       update(time, delta) {
-        ticker.emit('tick', { time, delta });
+        updater.emit('update', { time, delta });
       },
     },
   });

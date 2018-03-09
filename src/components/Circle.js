@@ -23,7 +23,6 @@ class Circle extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.circle = new Phaser.Geom.Circle(props.x, props.y, props.radius);
-    this.context.graphics.strokeCircleShape(this.circle);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,10 +35,10 @@ class Circle extends React.Component {
     if (this.props.radius !== nextProps.radius) {
       this.circle.radius = nextProps.radius;
     }
-    this.context.graphics.strokeCircleShape(this.circle);
   }
 
   render() {
+    this.context.graphics.strokeCircleShape(this.circle);
     return null;
   }
 }

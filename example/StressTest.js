@@ -1,7 +1,9 @@
 import React from 'react';
 import Phaser from 'phaser';
+import _ from 'lodash';
 
-import { Game, Ticker, Input, Text, Sprite } from '../src';
+import { Game, Updater, Input, Text } from '../src';
+import PulsarThing from './PulsarThing';
 import SpiralThing from './SpiralThing';
 import UIPanel from './UIPanel';
 import mushroom from './mushroom2.png';
@@ -26,6 +28,7 @@ class StressTest extends React.Component {
     this.originalWidth = window.innerWidth;
     this.originalHeight = window.innerHeight;
 
+    this.handleUpdate = ::this.handleUpdate;
     this.resetCharacterPosition = ::this.resetCharacterPosition;
   }
 
@@ -35,11 +38,26 @@ class StressTest extends React.Component {
     time: 0,
   };
 
+  setFps = _.throttle((delta) => {
+    this.setState(({ fps }) => ({ fps: calcFps({ oldFps: fps, delta }) }));
+  }, 250);
+
+  handleUpdate({ time, delta, keys }) {
+    this.setState(({ characterPosition }) => ({
+      time,
+      characterPosition: calcNewPosition({ position: characterPosition, keys }),
+    }));
+
+    this.setFps(delta);
+  }
+
   resetCharacterPosition() {
     this.setState({ characterPosition: { x: 100, y: 100 } });
   }
 
   render() {
+    const { characterPosition, time, fps } = this.state;
+    const roundedFps = Math.round(fps * 100) / 100;
     return (
       <div>
         <Game
@@ -47,27 +65,23 @@ class StressTest extends React.Component {
           width={this.originalWidth}
           height={this.originalHeight}
         >
+          <Updater onUpdate={this.handleUpdate} />
           <Text style={{ fontSize: 18 }}>
-            {`Use WASD to move lone shroom.  FPS: ${this.state.fps}`}
+            {`Use WASD to move lone shroom. FPS: ${roundedFps}`}
           </Text>
-          <Ticker
-            onTick={({ time, delta, keys }) => this.setState(({ fps, characterPosition }) => ({
-              time,
-              fps: calcFps({ oldFps: fps, delta }),
-              characterPosition: calcNewPosition({ position: characterPosition, keys }),
-            }))}
+
+          <PulsarThing
+            x={characterPosition.x}
+            y={characterPosition.y}
+            time={time}
           />
+
           <Input mouseMove>
             {({ mousePosition: { x, y } }) => (
               <SpiralThing x={x} y={y} time={this.state.time} />
             )}
           </Input>
-          <Sprite
-            image={mushroom}
-            onClick={console.log}
-            x={this.state.characterPosition.x}
-            y={this.state.characterPosition.y}
-          />
+
         </Game>
         <UIPanel>
           <button onClick={this.resetCharacterPosition}>

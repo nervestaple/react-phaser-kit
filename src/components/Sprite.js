@@ -1,63 +1,94 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
+
+import { renderToPhaser, getDiff } from '../renderUtils';
 
 class Sprite extends React.Component {
   static defaultProps = {
     x: 0,
     y: 0,
-    scale: 1,
-    onClick: null,
   };
 
   static propTypes = {
     x: PropTypes.number,
     y: PropTypes.number,
-    scale: PropTypes.number,
     image: PropTypes.string.isRequired,
-    onClick: PropTypes.func,
   };
 
   static contextTypes = {
     scene: PropTypes.object,
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const prevProps = _.get(prevState, 'props', {});
+    return {
+      diff: getDiff(prevProps, nextProps),
+      props: nextProps,
+    };
+  }
+
   constructor(props, context) {
     super(props, context);
+    this.setPhaserObject = ::this.setPhaserObject;
+    this.setOnClick = ::this.setOnClick;
+    this.removeOnClick = ::this.removeOnClick;
+
     this.sprite = context.scene.add.sprite(props.x, props.y, props.image);
   }
 
-  componentDidMount() {
-    if (this.props.onClick) {
-      this.setOnClick(this.props.onClick);
-    }
-  }
+  state = { diff: {} };
 
-  /*
-    does this make sense? techically using componentWillReceiveProps()
-    as a 'render' func here. could use shouldComponentUpdate() and render()
-    to set updated props, but then couldn't optionally set single properties like we do here
-  */
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.onClick && nextProps.onClick) {
-      this.setOnClick(nextProps.onClick);
+  shouldComponentUpdate(nextProps, nextState) {
+    const { diff: { added, modified, removed } } = nextState;
+    if (_.isEmpty(added) && _.isEmpty(modified) && removed.length === 0) {
+      return false;
     }
-    if (this.props.x !== nextProps.x) {
-      this.sprite.x = nextProps.x;
-    }
-    if (this.props.y !== nextProps.y) {
-      this.sprite.y = nextProps.y;
-    }
-    if (this.props.scale !== nextProps.scale) {
-      this.sprite.scale = { x: nextProps.scale, y: nextProps.scale };
-    }
+    return true;
   }
 
   setOnClick(onClick) {
-    this.sprite = this.sprite.setInteractive();
+    this.removeOnClick();
+    this.sprite.setInteractive();
     this.sprite.on('pointerdown', onClick);
+    this.currentOnClick = onClick;
   }
 
+  setPhaserObject(prop, value) {
+    this.sprite[prop] = value;
+  }
+
+  removeOnClick() {
+    if (this.currentOnClick) {
+      this.context.scene.input.clear(this.sprite);
+      this.sprite.off('pointerdown', this.currentOnClick);
+      delete this.currentOnClick;
+    }
+  }
+
+  handlers = {
+    added: {
+      onClick: ::this.setOnClick,
+      tint: value => this.sprite.setTint(value),
+    },
+    modified: {
+      onClick: ::this.setOnClick,
+      tint: value => this.sprite.setTint(value),
+    },
+    removed: {
+      onClick: ::this.removeOnClick,
+      tint: () => this.sprite.clearTint(),
+    },
+  };
+
+
   render() {
+    renderToPhaser({
+      setPhaserObject: this.setPhaserObject,
+      diff: this.state.diff,
+      handlers: this.handlers,
+    });
+
     return null;
   }
 }

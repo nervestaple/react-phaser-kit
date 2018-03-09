@@ -7,15 +7,15 @@ const { Input: { Keyboard: { KeyCodes } } } = Phaser;
 
 const keyCodesToWatch = [KeyCodes.W, KeyCodes.A, KeyCodes.S, KeyCodes.D];
 
-class Ticker extends React.Component {
+class Updater extends React.Component {
   static defaultProps = {
     children: null,
-    onTick: null,
+    onUpdate: null,
   };
 
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-    onTick: PropTypes.func,
+    onUpdate: PropTypes.func,
   };
 
   static contextTypes = {
@@ -24,12 +24,12 @@ class Ticker extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.tick = ::this.tick;
-    this.scene = context.scene;
-    this.scene.ticker.on('tick', this.tick);
+    this.handleUpdate = ::this.handleUpdate;
+
+    this.context.scene.updater.on('update', this.handleUpdate);
     this.keys = _(keyCodesToWatch)
       .keyBy()
-      .mapValues(keyCode => this.scene.input.keyboard.addKey(keyCode))
+      .mapValues(keyCode => this.context.scene.input.keyboard.addKey(keyCode))
       .value();
   }
 
@@ -42,17 +42,19 @@ class Ticker extends React.Component {
   }
 
   componentWillUnmount() {
-    this.scene.ticker.removeListener('tick', this.tick);
+    this.context.scene.ticker.removeListener('update', this.handleUpdate);
   }
 
   getKeysDown() {
     return _.mapValues(this.keys, 'isDown');
   }
 
-  tick({ time, delta }) {
-    this.setState({ time, delta });
-    if (this.props.onTick) {
-      this.props.onTick({
+  handleUpdate({ time, delta }) {
+    if (this.props.children) {
+      this.setState({ time, delta });
+    }
+    if (this.props.onUpdate) {
+      this.props.onUpdate({
         time,
         delta,
         keys: this.getKeysDown(),
@@ -74,4 +76,4 @@ class Ticker extends React.Component {
   }
 }
 
-export default Ticker;
+export default Updater;

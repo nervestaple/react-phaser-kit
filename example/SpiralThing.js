@@ -5,33 +5,45 @@ import _ from 'lodash';
 import { Sprite, Graphics, Circle } from '../src';
 import mushroom from './mushroom2.png';
 
-const SpiralThing = ({ x, y, time }) => (
+const SpiralThing = ({
+  x, y, time, spriteNum, circleNum,
+}) => (
   <React.Fragment>
     <Graphics lineStyle={{ width: 19, color: 0x11ff33 }}>
-      {_.range(1, 6).map(n => (
+      {_.range(1, circleNum).map(n => (
         <Circle
           key={n}
           x={x}
           y={y}
-          radius={n * (50 + (10 * Math.sin((time / 100))))}
+          radius={n * (50 + (10 * Math.sin((time / 500))))}
         />
       ))}
     </Graphics>
-    {_.range(1, 20).map(n => (
+    {_.range(1, spriteNum).map(n => (
       <Sprite
         key={n}
         image={mushroom}
-        x={x + (10 * n * Math.sin(((time / 195)) + n))}
-        y={y + (10 * n * Math.cos(((time / 200)) + n))}
+        x={x + (10 * n * Math.sin(((time / 1000)) + n))}
+        y={y + (10 * n * Math.cos(((time / 1000)) + n))}
       />
     ))}
   </React.Fragment>
 );
 
 SpiralThing.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  time: PropTypes.number.isRequired,
+  x: PropTypes.number,
+  y: PropTypes.number,
+  time: PropTypes.number,
+  spriteNum: PropTypes.number,
+  circleNum: PropTypes.number,
+};
+
+SpiralThing.defaultProps = {
+  x: 0,
+  y: 0,
+  time: 0,
+  spriteNum: 20,
+  circleNum: 6,
 };
 
 export default SpiralThing;
