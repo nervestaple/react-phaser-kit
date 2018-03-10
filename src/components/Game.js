@@ -19,14 +19,6 @@ class Game extends React.Component {
     children: PropTypes.node,
   };
 
-  static childContextTypes = {
-    scene: PropTypes.object,
-  };
-
-  getChildContext() {
-    return { scene: this.scene };
-  }
-
   componentDidMount() {
     const {
       width,
