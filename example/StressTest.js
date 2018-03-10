@@ -1,6 +1,5 @@
 import React from 'react';
 import Phaser from 'phaser';
-import _ from 'lodash';
 
 import { Game, Updater, Input, Text } from '../src';
 import PulsarThing from './PulsarThing';
@@ -29,34 +28,40 @@ class StressTest extends React.Component {
     this.originalHeight = window.innerHeight;
 
     this.handleUpdate = ::this.handleUpdate;
+    this.setMousePosition = ::this.setMousePosition;
     this.resetCharacterPosition = ::this.resetCharacterPosition;
   }
 
   state = {
+    mousePosition: { x: 0, y: 0 },
     characterPosition: { x: 100, y: 100 },
     fps: 60,
     time: 0,
   };
 
-  setFps = _.throttle((delta) => {
-    this.setState(({ fps }) => ({ fps: calcFps({ oldFps: fps, delta }) }));
-  }, 250);
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.time > this.state.time;
+  }
+
+  setMousePosition(pointer) {
+    this.setState({ mousePosition: pointer.position });
+  }
 
   handleUpdate({ time, delta, keys }) {
-    this.setState(({ characterPosition }) => ({
+    this.setState(({ fps, characterPosition }) => ({
       time,
+      fps: calcFps({ oldFps: fps, delta }),
       characterPosition: calcNewPosition({ position: characterPosition, keys }),
     }));
-
-    this.setFps(delta);
   }
+
 
   resetCharacterPosition() {
     this.setState({ characterPosition: { x: 100, y: 100 } });
   }
 
   render() {
-    const { characterPosition, time, fps } = this.state;
+    const { mousePosition, characterPosition, time, fps } = this.state;
     const roundedFps = Math.round(fps * 100) / 100;
     return (
       <div>
@@ -66,6 +71,8 @@ class StressTest extends React.Component {
           height={this.originalHeight}
         >
           <Updater onUpdate={this.handleUpdate} />
+          <Input onMouseMove={this.setMousePosition} />
+
           <Text style={{ fontSize: 18 }}>
             {`Use WASD to move lone shroom. FPS: ${roundedFps}`}
           </Text>
@@ -76,11 +83,11 @@ class StressTest extends React.Component {
             time={time}
           />
 
-          <Input mouseMove>
-            {({ mousePosition: { x, y } }) => (
-              <SpiralThing x={x} y={y} time={this.state.time} />
-            )}
-          </Input>
+          <SpiralThing
+            x={mousePosition.x}
+            y={mousePosition.y}
+            time={time}
+          />
 
         </Game>
         <UIPanel>

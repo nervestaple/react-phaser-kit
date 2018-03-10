@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 class Input extends React.Component {
   static defaultProps = {
     mouseMove: false,
+    onMouseMove: null,
     onKeyDown: null,
     children: null,
   };
 
   static propTypes = {
     mouseMove: PropTypes.bool,
+    onMouseMove: PropTypes.func,
     onKeyDown: PropTypes.func,
     children: PropTypes.func,
   };
@@ -28,7 +30,7 @@ class Input extends React.Component {
   };
 
   componentDidMount() {
-    if (this.props.mouseMove) {
+    if (this.props.mouseMove || this.props.onMouseMove) {
       this.addPointerMoveHandler();
     }
     if (this.props.onKeyDown) {
@@ -43,6 +45,12 @@ class Input extends React.Component {
     if (this.props.mouseMove && !nextProps.mouseMove) {
       this.removePointerMoveHandler();
     }
+    if (!this.props.onMouseMove && nextProps.onMouseMove) {
+      this.addPointerMoveHandler();
+    }
+    if (this.props.onMouseMove && !nextProps.onMouseMove) {
+      this.removePointerMoveHandler();
+    }
     if (!this.props.onKeyDown && nextProps.onKeyDown) {
       this.addKeyDownHandler(nextProps.onKeyDown);
     }
@@ -55,8 +63,13 @@ class Input extends React.Component {
     this.removePointerMoveHandler();
   }
 
-  setPosition({ position }) {
-    this.setState({ mousePosition: position });
+  setPosition(pointer) {
+    if (this.props.onMouseMove) {
+      this.props.onMouseMove(pointer);
+    }
+    if (this.props.children) {
+      this.setState({ mousePosition: pointer.position });
+    }
   }
 
   addPointerMoveHandler() {
