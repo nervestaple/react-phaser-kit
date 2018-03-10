@@ -23,7 +23,7 @@ class FPSCounter extends React.Component {
   }
 
   render() {
-    const roundedFps = Math.round(this.state.fps * 100) / 100;
+    const roundedFps = Number(this.state.fps).toFixed(2);
     return (
       <React.Fragment>
         <updater onUpdate={this.setFps} />

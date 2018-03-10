@@ -19,19 +19,25 @@ class PhaserExampleComponent extends React.Component {
     this.handleMouseMove = ::this.handleMouseMove;
   }
 
-  state = { time: 0, position: { x: 200, y: 200 }, mousePosition: { x: 0, y: 0 } };
+  state = {
+    time: 0,
+    position: { x: 200, y: 200 },
+    mousePosition: { x: 0, y: 0 },
+  };
 
-  handleUpdate({ time, keys }) {
-    this.setState({ time });
-    if (keys) {
-      this.setState(({ position }) => ({
-        position: calcNewPosition({ position, keys }),
-      }));
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.time > this.state.time;
   }
 
   handleMouseMove({ position: { x, y } }) {
     this.setState({ mousePosition: { x, y } });
+  }
+
+  handleUpdate({ time, keys }) {
+    this.setState(({ position }) => ({
+      time,
+      ...(keys ? { position: calcNewPosition({ position, keys }) } : {}),
+    }));
   }
 
   render() {
@@ -43,7 +49,7 @@ class PhaserExampleComponent extends React.Component {
           watchKeys={[KeyCodes.W, KeyCodes.A, KeyCodes.S, KeyCodes.D]}
         />
         <input onMouseMove={this.handleMouseMove} />
-        <FPSCounter />
+        {/* <FPSCounter /> */}
         <PulsarThing x={position.x} y={position.y} time={time} />
         <SpiralThing
           x={mousePosition.x}
