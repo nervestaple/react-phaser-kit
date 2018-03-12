@@ -16,11 +16,16 @@ class FPSCounter extends React.Component {
 
   state = { fps: 60 };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.fps !== this.state.fps;
+  }
+
   setFps({ delta }) {
     this.setState(({ fps }) => ({
       fps: calcFps({ oldFps: fps, delta, samples: this.props.samples }),
     }));
   }
+
 
   render() {
     const roundedFps = Number(this.state.fps).toFixed(2);

@@ -9,5 +9,5 @@ const files = assets.map(url => ({ type: 'image', key: url, url }));
 
 ReactPhaser.createPhaserGame({ files, parent: document.getElementById('container') })
   .then((scene) => {
-    ReactPhaser.render(<PhaserExampleComponent />, scene);
+    ReactPhaser.render(<PhaserExampleComponent scene={scene} />, scene);
   });
