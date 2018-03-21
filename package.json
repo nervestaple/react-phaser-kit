@@ -2,7 +2,7 @@
   "name": "react-phaser-kit",
   "version": "0.0.2",
   "description": "React component kit for Phaser game engine",
-  "main": "lib/index.js",
+  "main": "lib/react-phaser-kit.min.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nervestaple/react-phaser-kit.git"
