@@ -1,6 +1,6 @@
 {
   "name": "react-phaser-kit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React component kit for Phaser game engine",
   "main": "lib/react-phaser-kit.min.js",
   "repository": {
