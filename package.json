@@ -11,7 +11,7 @@
     "fbjs": "^0.8.16",
     "lodash": "^4.17.4",
     "performance-now": "^2.1.0",
-    "phaser": "^3.1.1",
+    "phaser": "^3.2.1",
     "prop-types": "^15.6.0",
     "react": "^16.4.0-alpha.0911da3",
     "react-dom": "^16.4.0-alpha.0911da3",
