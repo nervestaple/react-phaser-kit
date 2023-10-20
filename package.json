@@ -40,7 +40,7 @@
     "image-webpack-loader": "^4.0.0",
     "jest": "^21.2.1",
     "raw-loader": "^0.5.1",
-    "react-devtools": "^3.1.0",
+    "react-devtools": "^4.28.4",
     "stateful-react-container-webpack-plugin": "^0.3.2",
     "uglifyjs-webpack-plugin": "^1.2.0",
     "webpack": "^3.10.0",
